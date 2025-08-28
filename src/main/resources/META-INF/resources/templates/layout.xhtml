@@ -16,55 +16,36 @@
     </h:head>
     
     <h:body>
-        <div class="main-container">
+        <div class="layout-container">
             <!-- Sidebar -->
-            <div class="sidebar">
+            <aside class="sidebar">
                 <div class="sidebar-header">
-                    <i class="pi pi-home" style="margin-right: 8px;"></i>
-                    Chaos Menü
+                    <h3>Chaos Menü</h3>
                 </div>
-                
-                <ul class="sidebar-menu">
-                    <li>
-                        <h:link outcome="dashboard" styleClass="sidebar-link">
-                            <i class="pi pi-cog" style="margin-right: 8px;"></i>
-                            Dashboard
-                        </h:link>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="pi pi-users" style="margin-right: 8px;"></i>
-                            Benutzer
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="pi pi-chart-bar" style="margin-right: 8px;"></i>
-                            Berichte
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="pi pi-cog" style="margin-right: 8px;"></i>
-                            Einstellungen
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                <p:menu>
+                    <p:menuitem value="Dashboard" icon="pi pi-home" 
+                                outcome="index" styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Dashboard" icon="pi pi-cog" 
+                                outcome="dashboard" styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Benutzer" icon="pi pi-users" 
+                                styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Berichte" icon="pi pi-chart-bar" 
+                                styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Einstellungen" icon="pi pi-cog" 
+                                styleClass="ui-menuitem-link"/>
+                </p:menu>
+            </aside>
             
             <!-- Main Content -->
-            <div class="main-content">
-                <div class="content-header">
-                    <h1><ui:insert name="pageTitle">Überschrift</ui:insert></h1>
-                    <p><ui:insert name="pageDescription">Beschreibung</ui:insert></p>
-                </div>
-                
-                <div class="content-body">
+            <main class="main-content">
+                <p:panel header="#{pageTitle}" styleClass="ui-panel-shadow">
+                    <p class="ui-panel-description">#{pageDescription}</p>
+                    
                     <ui:insert name="content">
-                    <h:outputText value="Inhalt fehlt!" />
-                </ui:insert>
-                </div>
-            </div>
+                        <h:outputText value="Inhalt fehlt!" />
+                    </ui:insert>
+                </p:panel>
+            </main>
         </div>
     </h:body>
 </f:view>
