@@ -14,10 +14,19 @@
     
     <!-- Navigation Rules -->
     <navigation-rule>
-        <from-view-id>/index.xhtml</from-view-id>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>index</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
         <navigation-case>
             <from-outcome>dashboard</from-outcome>
             <to-view-id>/dashboard.xhtml</to-view-id>
+            <redirect />
         </navigation-case>
     </navigation-rule>
 
