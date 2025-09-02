@@ -20,12 +20,24 @@
                     <p:outputLabel value="Aktuelle Zeit: #{chaosBean.currentTime}" />
                     
                     <p:separator />
-                    
-                    <p:commandButton value="Zeit aktualisieren" 
-                                    icon="pi pi-refresh" 
-                                    styleClass="p-button-info"
-                                    action="#{chaosBean.showWelcomeMessage}"
-                                    update="@form" />
+
+                    <p:panelGrid columns="3" columnClasses="ui-g-2,ui-g-2,ui-g-2" styleClass="ui-noborder ui-panelgrid-blank">
+                        <p:commandButton value="Zeit aktualisieren" 
+                                        icon="pi pi-refresh" 
+                                        styleClass="p-button-info"
+                                        action="#{chaosBean.showWelcomeMessage}"
+                                        update="@form" />
+                        <p:commandButton value="Test Fehler" 
+                                        icon="pi pi-exclamation-triangle" 
+                                        styleClass="p-button-danger"
+                                        action="#{chaosBean.throwError}"
+                                        update="@form" />
+                        <p:commandButton value="Test 404" 
+                                        icon="pi pi-exclamation-triangle" 
+                                        styleClass="p-button-danger"
+                                        action="#{chaosBean.throw404Error}"
+                                        ajax="false" />
+                    </p:panelGrid>
                 </p:panelGrid>
             </h:form>
         </p:panel>

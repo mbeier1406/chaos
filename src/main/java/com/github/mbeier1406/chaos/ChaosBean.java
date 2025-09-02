@@ -1,10 +1,14 @@
 package com.github.mbeier1406.chaos;
 
-import jakarta.enterprise.context.SessionScoped;
-import jakarta.inject.Named;
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Named
 @SessionScoped
@@ -14,7 +18,10 @@ public class ChaosBean implements Serializable {
     
     private String message = "Willkommen bei Chaos!";
     private String currentTime;
-    
+
+    @Inject
+    private HttpServletResponse response;
+
     public ChaosBean() {
         updateTime();
     }
@@ -45,4 +52,13 @@ public class ChaosBean implements Serializable {
     public void showWelcomeMessage() {
         this.message = "Sie haben den Button geklickt! Zeit: " + getCurrentTime();
     }
-} 
+
+    public void throwError() {
+        throw new RuntimeException("Test Fehler");
+    }
+
+    public void throw404Error() throws IOException {
+        response.sendError(HttpServletResponse.SC_NOT_FOUND, "404 - Seite nicht gefunden");
+    }
+
+}
