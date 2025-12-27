@@ -32,6 +32,12 @@
 
   <dependencies>
     <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.34</version>
+        <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy</artifactId>
     </dependency>
@@ -53,18 +59,9 @@
       <artifactId>quarkus-primefaces</artifactId>
       <version>3.15.5</version>
     </dependency>
-
-
-    <!-- Test-Dependencies -->
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <scope>test</scope>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-elytron-security-common</artifactId>
     </dependency>
   </dependencies>
 
@@ -92,6 +89,13 @@
           <compilerArgs>
             <arg>-parameters</arg>
           </compilerArgs>
+          <annotationProcessorPaths>
+            <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.34</version>
+            </path>
+        </annotationProcessorPaths>
         </configuration>
       </plugin>
       <plugin>
@@ -129,6 +133,26 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>TEST</id>
+      <activation><activeByDefault>true</activeByDefault></activation>
+      <properties>
+        <skipITs>false</skipITs>
+      </properties>
+      <dependencies>
+        <!-- Test-Dependencies -->
+        <dependency>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-junit5</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>io.rest-assured</groupId>
+          <artifactId>rest-assured</artifactId>
+          <scope>test</scope>
+        </dependency>        
+      </dependencies>
+    </profile>
     <profile>
       <id>native</id>
       <activation>

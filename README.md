@@ -115,3 +115,7 @@ Die Anwendung kann über `src/main/resources/application.properties` konfigurier
 1. Erstellen iner neue `.xhtml` Datei in `src/main/resources/META-INF/resources/`
 2. Navigation zur Sidebar hinzufügen
 3. Erstellung ggf. einer neuen Managed Bean
+
+### Debugging
+
+HTTP-Requests und Responses anzeigen: `$ sudo ngrep -d lo -W byline '' port 8080`

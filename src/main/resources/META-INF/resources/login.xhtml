@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml">
+
+    <ui:define name="title">Login - Chaos</ui:define>
+    <ui:define name="pageTitle">Benutzer-Anmeldung</ui:define>
+    <ui:define name="pageDescription">
+        #{loginBean.loggedIn ? loginBean.loggedInAs() : 'Bitte melden Sie sich mit Ihren Zugangsdaten an.'}
+    </ui:define>
+    
+    <ui:define name="content">
+        <p:panel header="Login" styleClass="ui-panel-shadow" style="max-width: 500px; margin: 0 auto;" rendered="#{loginBean.loggedIn == false}">
+            <h:form id="loginForm">
+                <p:messages id="messages" showDetail="true" closable="true" />
+                
+                <p:panelGrid columns="1" styleClass="ui-noborder ui-panelgrid-blank" style="width: 100%;">
+
+                <!-- Fehlermeldung anzeigen -->
+                    <h:panelGroup rendered="#{not empty loginBean.errorMessage}">
+                        <p:outputLabel value="#{loginBean.errorMessage}" 
+                            styleClass="p-error" 
+                            style="color: red; font-weight: bold; display: block; margin-bottom: 10px;" />     
+                    </h:panelGroup>
+
+                    <!-- Benutzername -->
+                    <p:outputLabel for="username" value="Benutzername:" />
+                    <p:inputText id="username" 
+                                 value="#{loginBean.username}" 
+                                 required="true"
+                                 requiredMessage="Benutzername ist erforderlich"
+                                 placeholder="Benutzername eingeben"
+                                 styleClass="p-inputtext-lg"
+                                 style="width: 100%;" />
+                    
+                    <!-- Passwort -->
+                    <p:outputLabel for="password" value="Passwort:" />
+                    <p:password id="password" 
+                                value="#{loginBean.password}" 
+                                required="true"
+                                requiredMessage="Passwort ist erforderlich"
+                                placeholder="Passwort eingeben"
+                                feedback="false"
+                                toggleMask="true"
+                                styleClass="p-inputtext-lg"
+                                style="width: 100%;" />
+                    
+                    <p:separator />
+                    
+                    <!-- Login Button -->
+                    <p:commandButton value="Anmelden" 
+                                     icon="pi pi-sign-in" 
+                                     styleClass="p-button-success p-button-lg"
+                                     action="#{loginBean.login}"
+                                     update="loginForm"
+                                     style="width: 100%;" />
+                </p:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+    
+</ui:composition>

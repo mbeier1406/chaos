@@ -23,23 +23,33 @@
                     <h3>Chaos Menü</h3>
                 </div>
                 <p:menu>
-                    <p:menuitem value="Index" icon="pi pi-home" 
-                                outcome="index" styleClass="ui-menuitem-link"/>
-                    <p:menuitem value="Dashboard" icon="pi pi-cog" 
-                                outcome="dashboard" styleClass="ui-menuitem-link"/>
-                    <p:menuitem value="Benutzer" icon="pi pi-users" 
-                                styleClass="ui-menuitem-link"/>
-                    <p:menuitem value="Berichte" icon="pi pi-chart-bar" 
-                                styleClass="ui-menuitem-link"/>
-                    <p:menuitem value="Einstellungen" icon="pi pi-cog" 
-                                styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Login" icon="pi pi-sign-in" outcome="login" styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Index" icon="pi pi-home" outcome="index" styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Dashboard" icon="pi pi-cog" outcome="dashboard" styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Benutzer" icon="pi pi-users" styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Berichte" icon="pi pi-chart-bar" styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Einstellungen" icon="pi pi-cog" styleClass="ui-menuitem-link"/>
+                    <p:separator rendered="#{loginBean.loggedIn}" />
                 </p:menu>
+                <h:form rendered="#{loginBean.loggedIn}" style="padding: 1rem;">
+                    <p:commandButton value="Logout" 
+                                    icon="pi pi-sign-out" 
+                                    styleClass="p-button-danger p-button-sm"
+                                    action="#{loginBean.logout}"
+                                    ajax="false"
+                                    style="width: 100%;" />
+                </h:form>
             </aside>
             
             <!-- Main Content -->
             <main class="main-content">
-                <p:panel header="#{pageTitle}" styleClass="ui-panel-shadow">
-                    <p class="ui-panel-description">#{pageDescription}</p>
+                <p:panel styleClass="ui-panel-shadow">
+                    <f:facet name="header">
+                        <ui:insert name="pageTitle">Chaos</ui:insert>
+                    </f:facet>
+                    <p class="ui-panel-description">
+                        <ui:insert name="pageDescription">Informationen fehlen!</ui:insert>
+                    </p>
                     
                     <ui:insert name="content">
                         <h:outputText value="Inhalt fehlt!" />
