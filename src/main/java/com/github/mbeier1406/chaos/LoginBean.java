@@ -1,13 +1,17 @@
 package com.github.mbeier1406.chaos;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import io.quarkus.elytron.security.common.BcryptUtil;
+import io.quarkus.logging.Log;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -49,7 +53,11 @@ public class LoginBean implements Serializable {
     @Inject
     @ConfigProperty(name = "chaos.login.password")
     String configuredPasswordHash;
-    
+
+    /** Injizierte HttpSession für die Session-Verwaltung */
+    @Inject
+    private HttpSession session;
+
     /** Vom Benutzer eingegebener Benutzername */
     private String username;
     
@@ -73,11 +81,24 @@ public class LoginBean implements Serializable {
      *         {@code null} bei Fehler (bleibt auf Login-Seite)
      */
     public String login() {
+        Log.infof("Login attempt for user: %s (sessionId=%s, created=%d, lastAccessed=%d, maxInactiveInterval=%d, attribute: %s)",
+            username, 
+            session.getId(),
+            session.getCreationTime(),
+            session.getLastAccessedTime(),
+            session.getMaxInactiveInterval(),
+            Collections
+                .list(session.getAttributeNames())
+                .stream()
+                .map(name -> name + " = " + session.getAttribute(name))
+                .collect(Collectors.joining(", "))
+        );
         // BCrypt-Vergleich: hasht automatisch und vergleicht
         if (configuredUsername.equals(username) && 
             BcryptUtil.matches(password, configuredPasswordHash)) {
             loggedIn = true;
             errorMessage = null;
+            session.setAttribute("username", username);
             return "dashboard?faces-redirect=true";
         }
         errorMessage = "Ungültige Anmeldedaten!";
@@ -95,6 +116,7 @@ public class LoginBean implements Serializable {
         username = null;
         password = null;
         errorMessage = null;
+        session.removeAttribute("username");
         return "index?faces-redirect=true";
     }
 
