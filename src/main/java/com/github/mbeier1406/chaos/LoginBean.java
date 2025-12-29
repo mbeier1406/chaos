@@ -1,6 +1,7 @@
 package com.github.mbeier1406.chaos;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,9 @@ import io.quarkus.logging.Log;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 import lombok.Setter;
@@ -58,6 +62,14 @@ public class LoginBean implements Serializable {
     @Inject
     private HttpSession session;
 
+    /** Injizierte HttpServletRequest für die Request-Verwaltung (z.B. für den Cookie-Name) */
+    @Inject
+    private HttpServletRequest request;
+
+    /** Injizierte HttpServletResponse für die Cookie-Verwaltung */
+    @Inject
+    private HttpServletResponse response;
+
     /** Vom Benutzer eingegebener Benutzername */
     private String username;
     
@@ -81,7 +93,7 @@ public class LoginBean implements Serializable {
      *         {@code null} bei Fehler (bleibt auf Login-Seite)
      */
     public String login() {
-        Log.infof("Login attempt for user: %s (sessionId=%s, created=%d, lastAccessed=%d, maxInactiveInterval=%d, attribute: %s)",
+        Log.infof("Login attempt for user: %s (sessionId=%s, created=%d, lastAccessed=%d, maxInactiveInterval=%d, attribute: %s): %s",
             username, 
             session.getId(),
             session.getCreationTime(),
@@ -91,6 +103,9 @@ public class LoginBean implements Serializable {
                 .list(session.getAttributeNames())
                 .stream()
                 .map(name -> name + " = " + session.getAttribute(name))
+                .collect(Collectors.joining(", ")),
+            Arrays.stream(request.getCookies())
+                .map(cookie -> cookie.getName() + " = " + cookie.getValue())
                 .collect(Collectors.joining(", "))
         );
         // BCrypt-Vergleich: hasht automatisch und vergleicht
@@ -99,6 +114,13 @@ public class LoginBean implements Serializable {
             loggedIn = true;
             errorMessage = null;
             session.setAttribute("username", username);
+            Cookie cookie = new Cookie("login", username);
+            cookie.setMaxAge(3600);           // 1 Stunde
+            cookie.setPath("/");
+            cookie.setSecure(true);           // Nur HTTPS
+            cookie.setHttpOnly(true);         // Kein JavaScript-Zugriff
+            cookie.setAttribute("SameSite", "Strict");  // CSRF-Schutz
+            response.addCookie(cookie);
             return "dashboard?faces-redirect=true";
         }
         errorMessage = "Ungültige Anmeldedaten!";
