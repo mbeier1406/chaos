@@ -47,6 +47,7 @@ public class AuthenticationFilter implements Filter {
     private static final String[] PUBLIC_PAGES = {
         "/login.xhtml",      // Login-Seite
         "/index.xhtml",      // Startseite
+        "/user.xhtml",       // Demonstriert, wie eine Seite per direktem Check in xhtml geschützt werden kann
         "/error/"            // Fehlerseiten
     };
     

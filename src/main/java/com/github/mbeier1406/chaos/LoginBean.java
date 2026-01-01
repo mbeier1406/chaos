@@ -1,5 +1,6 @@
 package com.github.mbeier1406.chaos;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,6 +11,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.servlet.http.Cookie;
@@ -221,6 +223,22 @@ public class LoginBean implements Serializable {
      */
     public String loggedInAs() {
         return "Eingeloggt als: '" + username + "'";
+    }
+
+    /**
+     * Diese Methoder dient der Demonatration des Zugriffsschutzes auf Webseiten
+     * per xhtml. Wenn der Benutzer nicht authentifiziert ist, wird er zur Login-Seite umgeleitet.
+     * Es handelt sich um eine Alternative zum {@link AuthenticationFilter} (zentrale Konfiguration, läuft vor JSF!)
+     * und sollte nur für Demonstrationszwecke verwendet werden, da dieser Mechanismus für jede Seite wiederholt werden muss.
+     * @see {@code /home/mbeier/git/chaos/src/main/resources/META-INF/resources/user.xhtml}
+     */
+    public void checkAuthentication() throws IOException {
+        if (!loggedIn) {
+            var context = FacesContext.getCurrentInstance();
+            var externalContext = context.getExternalContext();
+            externalContext.redirect(externalContext.getRequestContextPath() + "/login.xhtml");
+            context.responseComplete();
+        }
     }
 
     /**
