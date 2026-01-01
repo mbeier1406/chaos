@@ -27,6 +27,9 @@ import jakarta.servlet.http.HttpServletResponse;
  * Um eine neue Seite öffentlich zugänglich zu machen, fügen Sie den Pfad zur
  * {@link #PUBLIC_PAGES} Konstante hinzu.
  * 
+ * Diese Filter ist die zentrale Konfiguration für die Zugriffskontrolle auf Webseiten.
+ * Alternativ kann jede einzelne Seite mit einem {@link LoginBean#checkAuthentication()}
+ * direkt geschützt werden (Beispiel: {@code src/main/resources/META-INF/resources/user.xhtml}).
  * @see LoginBean
  * @see WebFilter
  */
@@ -48,6 +51,7 @@ public class AuthenticationFilter implements Filter {
         "/login.xhtml",      // Login-Seite
         "/index.xhtml",      // Startseite
         "/user.xhtml",       // Demonstriert, wie eine Seite per direktem Check in xhtml geschützt werden kann
+        "/reports.xhtml",    // Demonstriert, wie eine Seite per PhaseListener geschützt werden kann
         "/error/"            // Fehlerseiten
     };
     
@@ -86,12 +90,7 @@ public class AuthenticationFilter implements Filter {
         }
 
         // Prüfen ob die angeforderte Seite öffentlich zugänglich ist
-        boolean isPublicPage = false;
-        for (String page : PUBLIC_PAGES)
-            if (requestPath.contains(page)) {
-                isPublicPage = true;
-                break;
-            }
+        boolean isPublicPage = isPublicPage(requestPath);
         
         // Zugriffskontrolle: Geschützte Seiten erfordern Authentifizierung
         if (!isPublicPage && !loginBean.isLoggedIn()) {
@@ -103,4 +102,45 @@ public class AuthenticationFilter implements Filter {
         // Request durchlassen - Benutzer ist authentifiziert oder Seite ist öffentlich
         chain.doFilter(request, response);
     }
+
+
+    /**
+     * Prüft die Authentifizierung und leitet nicht authentifizierte Benutzer zur Login-Seite um.
+     * <p>
+     * Diese Hilfsmethode kann verwendet werden, um eine explizite Authentifizierungsprüfung
+     * durchzuführen und bei Bedarf einen Redirect zur Login-Seite auszulösen.
+     * </p>
+     * 
+     * @param request  der eingehende ServletRequest
+     * @param response der ausgehende ServletResponse
+     * @throws IOException      bei I/O-Fehlern während des Redirects
+     * @throws ServletException bei Servlet-Fehlern
+     */
+    public void checkAuthentication(ServletRequest request, ServletResponse response) throws IOException, ServletException {
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+        
+        if (!loginBean.isLoggedIn()) {
+            res.sendRedirect(req.getContextPath() + "/login.xhtml");
+        }
+    }
+
+    /**
+     * Prüft, ob der angegebene Request-Pfad zu einer öffentlich zugänglichen Seite gehört.
+     * <p>
+     * Diese Methode durchsucht die {@link #PUBLIC_PAGES} Whitelist und prüft,
+     * ob der Request-Pfad einen der konfigurierten öffentlichen Pfade enthält.
+     * </p>
+     * 
+     * @param requestPath der zu prüfende Request-Pfad (URI)
+     * @return {@code true} wenn die Seite öffentlich zugänglich ist, {@code false} sonst
+     */
+    public boolean isPublicPage(String requestPath) {
+        for (String page : PUBLIC_PAGES)
+            if (requestPath.contains(page)) {
+                return true;
+            }
+        return false;
+    }
+
 }

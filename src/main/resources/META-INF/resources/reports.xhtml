@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml">
+
+    <ui:define name="title">Berichte</ui:define>
+    <ui:define name="pageTitle">Berichte</ui:define>
+    <ui:define name="pageDescription">Verwaltung der Berichte.</ui:define>
+    
+    <ui:define name="content">
+        <pre class="ui-outputtext-bold" style="font-family: inherit; margin: 0;">
+            Diese Seite wird über den AuthenticationPhaseListener geschützt.
+            Das ist eine weitere Alternative zum Filter (siehe
+            <code>com.github.mbeier1406.chaos.AuthenticationFilter.java</code>)
+            und zur direkten Prüfung in XHTML (Besipiel
+            <code>src/main/resources/META-INF/resources/user.xhtml</code>).
+            <p:divider><i class="pi pi-star"></i></p:divider>
+            Der PhaseListener greift in den JSF-Lifecycle ein.
+            <p:divider align="center" />
+            Obwohl <strong>&quot;/reports.xhtml&quot;</strong> in der Whitelist ist, wird der Benutzer zur Login-Seite umgeleitet,
+            da der PhaseListener die Prüfung durchführt und der Filter nicht greift.
+        </pre>
+    </ui:define>
+    
+</ui:composition> 

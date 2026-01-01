@@ -27,9 +27,9 @@
                     <p:menuitem value="Index" icon="pi pi-home" outcome="index" styleClass="ui-menuitem-link"/>
                     <p:menuitem value="Dashboard" icon="pi pi-cog" outcome="dashboard" styleClass="ui-menuitem-link"/>
                     <p:menuitem value="Benutzer" icon="pi pi-users" outcome="user" styleClass="ui-menuitem-link"/>
-                    <p:menuitem value="Berichte" icon="pi pi-chart-bar" styleClass="ui-menuitem-link"/>
+                    <p:menuitem value="Berichte" icon="pi pi-chart-bar" outcome="reports" styleClass="ui-menuitem-link"/>
                     <p:menuitem value="Einstellungen" icon="pi pi-cog" styleClass="ui-menuitem-link"/>
-                    <p:separator rendered="#{loginBean.loggedIn}" />
+                    <p:divider rendered="#{loginBean.loggedIn}" />
                 </p:menu>
                 <h:form rendered="#{loginBean.loggedIn}" style="padding: 1rem;">
                     <p:commandButton value="Logout" 

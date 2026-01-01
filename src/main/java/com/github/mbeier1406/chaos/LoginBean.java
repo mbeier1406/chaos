@@ -233,6 +233,7 @@ public class LoginBean implements Serializable {
      * @see {@code /home/mbeier/git/chaos/src/main/resources/META-INF/resources/user.xhtml}
      */
     public void checkAuthentication() throws IOException {
+        Log.infof("Checking authentication for user: %s", username);
         if (!loggedIn) {
             var context = FacesContext.getCurrentInstance();
             var externalContext = context.getExternalContext();
