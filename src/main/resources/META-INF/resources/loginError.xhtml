@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/templates/layout.xhtml">
+
+    <ui:define name="title">Login Fehler</ui:define>
+    <ui:define name="pageTitle">Anmeldung fehlgeschlagen</ui:define>
+    <ui:define name="pageDescription">Die Anmeldung war nicht erfolgreich</ui:define>
+    
+    <ui:define name="content">
+        <p:panel header="Anmeldung fehlgeschlagen" styleClass="ui-panel-shadow">
+            <div style="text-align: center; padding: 2rem;">
+                <i class="pi pi-times-circle" 
+                   style="font-size: 4rem; color: #dc3545; margin-bottom: 1rem;"></i>
+                
+                <h3 style="color: #dc3545;">Login fehlgeschlagen!</h3>
+                
+                <p style="color: #666; margin: 1.5rem 0;">
+                    Der Benutzername oder das Passwort ist falsch.<br/>
+                    Bitte versuchen Sie es erneut.
+                </p>
+                
+                <h:form>
+                    <p:button value="Zurück zum Login" 
+                              outcome="login2"
+                              icon="pi pi-arrow-left"
+                              styleClass="ui-button-info" />
+                </h:form>
+            </div>
+        </p:panel>
+    </ui:define>
+    
+</ui:composition>
